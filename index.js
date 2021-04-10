@@ -1,13 +1,22 @@
+// licenses MIT, APACHE, or 
+
+
+// www.linkedin.com/in/tyler-abegg, https://github.com/UnDuhDuhSea, tafimba@gmail.com, /imgs/developer_meme.jpg, This project will prompt the user with questions which will populate a new README File. Please open up the terminal and write node index.js and follow the prompts to create a README File.
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
+const generateMarkdown = require('./utils/generateMarkdown');
 const { Console } = require('console');
 
 // create writeFile function using promises instead of a callback function
 const writeFileAsync = util.promisify(fs.writeFile);
 // // TODO: Create an array of questions for user input
 // const questions = [];
+
+// const whichLicense = function() {
+//   if ()
+// }
 
 console.log('Please follow the prompts to populate your README file!');
 const promptUser = () => {
@@ -16,6 +25,16 @@ const promptUser = () => {
         type: 'input',
         name: 'linkedinURL',
         message: 'Linkedin URL',
+      },
+      {
+        type: 'input',
+        name: 'githubUsername',
+        message: 'Github Username',
+      },
+      {
+        type: 'input',
+        name: 'email',
+        message: 'Enter Email',
       },
       {
         type: 'input',
@@ -39,11 +58,6 @@ const promptUser = () => {
       },
       {
         type: 'input',
-        name: 'prjInstructions',
-        message: 'Please provide instructions.',
-      },
-      {
-        type: 'input',
         name: 'prjImgPath',
         message: 'Please provide the project image path.',
       },
@@ -53,101 +67,71 @@ const promptUser = () => {
         message: 'Please provide the alt text for your image.',
       },
       {
-        type: 'input',
-        name: 'prjCredits',
-        message: 'Please list your credits.',
+        type: 'list',
+        message: 'Please pick a license',
+        choices: ['MIT', 'APACHE', 'BSD3'],
+        name: 'prjLicense',
       },
-      {
-        type: 'input',
-        name: 'prjTests',
-        message: 'Please list your projects tests.',
-      },
-      {
-        type: 'input',
-        name: 'prjQuestions',
-        message: 'Please list your questions.',
-      },
-      {
-        type: 'input',
-        name: 'prjFeatures',
-        message: 'Please list your features.',
-      },
-      {
-        type: 'input',
-        name: 'prjBadges',
-        message: 'Please list your project Badges.',
-      },
-      {
-        type: 'input',
-        name: 'prjContributing',
-        message: 'Please list your project Contributors.',
-      },
-        //   {
-        //     type: 'input',
-        //     name: 'prjLicense',
-        //     message: 'Please list your license.',
-        //   },
     ]);
   };
   
-  const generateREADME = (answers) =>
-  `[![LinkedIn][linkedin-shield]][${answers.linkedinURL}]
+const generateREADME = (answers) =>
+`[![LinkedIn][linkedin-shield]][linkedin-url] \n
+![license](https://img.shields.io/badge/license-${answers.prjLicense}-blue)
 
-  # <${answers.prjTitle}>
+# ${answers.prjTitle}
   
-  ${answers.prjLink}
-  
-  ## Description
-  
-  ${answers.prjDiscription}
-  
-  ## Table of Contents
-  
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Credits](#credits)
-  - [License](#license)
-  - [Contributing](#contributing)
-  - [Tests](#tests)
-  - [Questions](#questions)
-  
-  ## Installation
-  
-  ${answers.prjInstallation}
-  
-  ## Usage
-  
-  ${answers.prjInstructions}
-  
-  md ![${answers.prjImgAltTxt}](${answers.prjImgPath})
-  
-  ## Credits
-  
-  ${answers.prjCredits}
+${answers.prjLink}
 
-  ## License
+![${answers.prjImgAltTxt}](${answers.prjImgPath})
+
+## Description
   
-  PROJECT LICENSE
+${answers.prjDiscription}
   
-  ## Badges
+## Table of Contents
   
-  ${answers.prjBadges}
+- [Installation](#installation)
+- [Usage](#usage)
+- [Credits](#credits)
+- [License](#license)
+- [Contributing](#contributing)
+- [Tests](#tests)
+- [Questions](#questions)
   
-  ## Features
+## Installation
   
-  ${answers.prjFeatures}
+${answers.prjInstallation}
   
-  ## Contributing
+## Usage
+
+Run \`node index.js\` in the terminal and follow the prompts to create a README.md file. \n
+
+Below is a video to follow for reference: \n
+
+VIDEO LINK
+
+## License
   
-  ${answers.contributing}
+License: \n 
+
+${answers.prjLicense}
   
-  ## Tests
+## Contributing
   
-  ${answers.prjTests}
+Created by [${answers.githubUsername}](https://github.com/${answers.githubUsername})
   
-  ## Questions
+## Tests
   
-  ${answers.prjQuestions}
+To run tests, run the following command: \n
+\`npm test\` in the terminal
+  
+## Questions
+  
+Github: [${answers.githubUsername}](https://github.com/${answers.githubUsername})\n
+Email: [${answers.email}](https://github.com/${answers.email})
+
+
   
   
   
@@ -157,22 +141,52 @@ const promptUser = () => {
   
   
   
-  
-  <!-- MARKDOWN LINKS & IMAGES -->
+<!-- MARKDOWN LINKS & IMAGES -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: www.linkedin.com/in/tyler-abegg`
-  ;
+[linkedin-url]:${answers.linkedinURL}`;
   
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {}
 
 // TODO: Create a function to initialize app
+
 const init = () => {
-    promptUser()
-      .then((answers) => writeFileAsync('README-generator.md', generateREADME(answers)))
-      .then(() => console.log('Successfully wrote to README.md'))
-      .catch((err) => console.error(err));
-  };
+  promptUser()
+    .then((answers) => writeFileAsync('README-generator.md', generateREADME(answers)))
+    .then(() => console.log('Successfully wrote to README.md'))
+    .catch((err) => console.error(err));
+};
 
 // Function call to initialize app
 init();
+
+
+// ######### Brian Example ############
+// const init = () => {
+//   promptUser()
+//     .then((answers) => {
+//       await writeFileAsync('README-generator.md', generateREADME(answers))
+//       console.log("success");
+//     })
+//     .then(() => console.log('Successfully wrote to README.md'))
+//     .catch((err) => console.error(err));
+// };
+
+
+
+
+// GIVEN a command-line application that accepts user input
+// WHEN I am prompted for information about my application repository
+// THEN a high-quality, professional README.md is generated with the title of my project and sections entitled Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
+// WHEN I enter my project title
+// THEN this is displayed as the title of the README
+// WHEN I enter a description, installation instructions, usage information, contribution guidelines, and test instructions
+// THEN this information is added to the sections of the README entitled Description, Installation, Usage, Contributing, and Tests
+// WHEN I choose a license for my application from a list of options
+// THEN a badge for that license is added near the top of the README and a notice is added to the section of the README entitled License that explains which license the application is covered under
+// WHEN I enter my GitHub username
+// THEN this is added to the section of the README entitled Questions, with a link to my GitHub profile
+// WHEN I enter my email address
+// THEN this is added to the section of the README entitled Questions, with instructions on how to reach me with additional questions
+// WHEN I click on the links in the Table of Contents
+// THEN I am taken to the corresponding section of the README
